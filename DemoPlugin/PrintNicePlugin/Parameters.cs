@@ -1,10 +1,10 @@
-﻿using System;
+﻿using PrintNicePlugin.Models;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PrintNicePlugin
 {
     public class Parameters
     {
+        public List<ClassParameters> Classes = new List<ClassParameters>();
     }
 }
