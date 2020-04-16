@@ -7,5 +7,10 @@ namespace PrintNicePlugin.Models
         public string TypeName;
 
         public List<MemberParameters> Members = new List<MemberParameters>();
+
+        public ClassParameters(string typeName)
+        {
+            this.TypeName = typeName;
+        }
     }
 }
