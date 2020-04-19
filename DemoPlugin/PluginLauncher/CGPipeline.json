@@ -1,0 +1,44 @@
+{
+  "codeFileHandlers": [
+    { "type": "ForgedOnce.CSharp.CSharpCodeFileHandlerFactory, ForgedOnce.CSharp" }
+  ],
+
+  "inputs": {
+    "SourceModels": "CSharp:Project:Source/Inputs/*.cs"
+  },
+  "batches": [
+    {
+      "name": "Batch01",
+      "stages": [
+        {
+          "name": "PrintNice",
+          "plugin": {
+            "pluginFactory": {
+              "type": "PrintNicePlugin.PluginFactory, PrintNicePlugin",
+              "config": {
+              }
+            }
+          },
+          "input": {
+            "settings": {
+              "SourceModels": "*.cs"
+            }
+          },
+          "output": {
+            "settings": {
+              "PassThrough": "*"
+            }
+          },
+          "destinationMapping": {
+            "PassThrough": {
+              "settings": {
+                "path": "Target/Generated"
+              }
+            }
+          },
+          "cleanDestinations": true
+        }
+      ]
+    }
+  ]
+}

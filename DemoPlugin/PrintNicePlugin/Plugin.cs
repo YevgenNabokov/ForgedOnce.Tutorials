@@ -3,8 +3,12 @@ using ForgedOnce.Core.Interfaces;
 using ForgedOnce.Core.Metadata.Interfaces;
 using ForgedOnce.Core.Plugins;
 using ForgedOnce.CSharp;
+using ForgedOnce.CSharp.Helpers.SemanticAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PrintNicePlugin
 {
@@ -34,7 +38,13 @@ namespace PrintNicePlugin
 
         protected override void Implementation(CodeFileCSharp input, Parameters inputParameters, IMetadataRecorder metadataRecorder, ILogger logger)
         {
-            throw new NotImplementedException();
+            var outFile = this.passThroughStream.CreateCodeFile(input.Name) as CodeFileCSharp;
+            CSharpSyntaxUtils.CloneContent(input, outFile, metadataRecorder);
+
+            var snapshot = outFile.NodePathService.GetSubTreeSnapshot(outFile.SyntaxTree.GetRoot());
+            var editor = new SyntaxEditor(snapshot, input, outFile, inputParameters, "Print");
+            var newRoot = editor.Visit(outFile.SyntaxTree.GetRoot());
+            outFile.SyntaxTree = CSharpSyntaxTree.Create(newRoot as CSharpSyntaxNode);
         }
     }
 }

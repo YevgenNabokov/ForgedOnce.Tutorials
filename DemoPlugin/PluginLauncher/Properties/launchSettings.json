@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PluginLauncher": {
+      "commandName": "Project",
+      "commandLineArgs": "$(SolutionDir)PrintNicePlugin.Sandbox.sln $(ProjectDir)CGPipeline.json"
+    }
+  }
+}

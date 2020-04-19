@@ -12,7 +12,7 @@ namespace PrintNicePlugin
 {
     public class Preprocessor : IPluginPreprocessor<CodeFileCSharp, Parameters, Settings>
     {
-        public Parameters GenerateMetadata(
+        public Parameters GenerateParameters(
             CodeFileCSharp input,
             Settings pluginSettings,
             IMetadataReader metadataReader,
@@ -37,6 +37,8 @@ namespace PrintNicePlugin
                 {
                     classParams.Members.Add(new MemberParameters(field.Name, true));
                 }
+
+                result.Classes.Add(classParams);
             }
 
             return result;

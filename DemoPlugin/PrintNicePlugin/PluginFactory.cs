@@ -11,7 +11,12 @@ namespace PrintNicePlugin
             JObject configuration,
             IPluginPreprocessor<CodeFileCSharp, Parameters, Settings> pluginPreprocessor = null)
         {
-            return new Plugin();
+            var settings = new Settings();
+            return new Plugin()
+            {
+                Preprocessor = pluginPreprocessor ?? new Preprocessor(),
+                Settings = settings
+            };
         }
     }
 }

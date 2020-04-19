@@ -5,8 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ForgedOnce.CSharp" Version="0.4.3" />
-    <PackageReference Include="ForgedOnce.CSharp.Helpers" Version="0.1.0" />
+    <Folder Include="Generated\" />
   </ItemGroup>
 
 </Project>
