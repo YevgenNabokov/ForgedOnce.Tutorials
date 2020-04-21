@@ -16,6 +16,7 @@
             "pluginFactory": {
               "type": "PrintNicePlugin.PluginFactory, PrintNicePlugin",
               "config": {
+                "overrideToString": true
               }
             }
           },

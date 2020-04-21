@@ -42,7 +42,7 @@ namespace PrintNicePlugin
             CSharpSyntaxUtils.CloneContent(input, outFile, metadataRecorder);
 
             var snapshot = outFile.NodePathService.GetSubTreeSnapshot(outFile.SyntaxTree.GetRoot());
-            var editor = new SyntaxEditor(snapshot, input, outFile, inputParameters, "Print");
+            var editor = new SyntaxEditor(snapshot, input, outFile, inputParameters, this.Settings);
             var newRoot = editor.Visit(outFile.SyntaxTree.GetRoot());
             outFile.SyntaxTree = CSharpSyntaxTree.Create(newRoot as CSharpSyntaxNode);
         }

@@ -24,5 +24,10 @@ namespace Source.Inputs
         {
             return $"IntProperty: '{IntProperty}'; StringProperty: '{StringProperty}'; IntField: '{IntField}'; StringField: '{StringField}';";
         }
+
+        public override System.String ToString()
+        {
+            return Print();
+        }
     }
 }
