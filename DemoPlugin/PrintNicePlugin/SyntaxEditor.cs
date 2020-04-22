@@ -15,6 +15,7 @@ namespace PrintNicePlugin
 {
     public class SyntaxEditor : CSharpSyntaxRewriter
     {
+        public readonly string AnnotationKey = Guid.NewGuid().ToString();
         private readonly Settings settings;
         private readonly ISubTreeSnapshot snapshot;
         private readonly CodeFileCSharp input;
@@ -84,7 +85,8 @@ namespace PrintNicePlugin
                                 Token(SyntaxKind.InterpolatedStringStartToken),
                                 List(parts)))
                     })))
-                .WithModifiers(TokenList(new SyntaxToken[] { Token(SyntaxKind.PublicKeyword) }));
+                .WithModifiers(TokenList(new SyntaxToken[] { Token(SyntaxKind.PublicKeyword) }))
+                .WithAdditionalAnnotations(new SyntaxAnnotation(this.AnnotationKey));
 
             return node.AddMembers(printMethod);
         }
@@ -105,7 +107,8 @@ namespace PrintNicePlugin
                         InvocationExpression(
                             IdentifierName(this.settings.PrintMethodName)
                         ))
-                })));
+                })))
+                .WithAdditionalAnnotations(new SyntaxAnnotation(this.AnnotationKey));
 
             if (existingToStringMethod != null)
             {

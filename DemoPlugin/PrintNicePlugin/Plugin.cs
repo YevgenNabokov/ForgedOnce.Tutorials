@@ -4,6 +4,7 @@ using ForgedOnce.Core.Metadata.Interfaces;
 using ForgedOnce.Core.Plugins;
 using ForgedOnce.CSharp;
 using ForgedOnce.CSharp.Helpers.SemanticAnalysis;
+using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
@@ -45,6 +46,11 @@ namespace PrintNicePlugin
             var editor = new SyntaxEditor(snapshot, input, outFile, inputParameters, this.Settings);
             var newRoot = editor.Visit(outFile.SyntaxTree.GetRoot());
             outFile.SyntaxTree = CSharpSyntaxTree.Create(newRoot as CSharpSyntaxNode);
+
+            foreach (var added in outFile.SyntaxTree.GetRoot().DescendantNodes().Where((n) => n.GetAnnotations(editor.AnnotationKey).Any()))
+            {
+                metadataRecorder.SymbolGenerated<SyntaxNode>(outFile.NodePathService, added, new Dictionary<string, string>());
+            }
         }
     }
 }
