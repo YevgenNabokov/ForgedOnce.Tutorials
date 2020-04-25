@@ -3,6 +3,7 @@ using ForgedOnce.CSharp;
 using ForgedOnce.Environment.Interfaces;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Linq;
 
 namespace PrintNicePlugin
 {
@@ -15,6 +16,8 @@ namespace PrintNicePlugin
             var settings = new Settings();
             this.SetFromConfiguration((v) => bool.TryParse(v, out settings.OverrideToString), configuration, Settings.OverrideToStringKey);
             this.SetFromConfiguration((v) => settings.PrintMethodName = v, configuration, Settings.PrintMethodNameKey);
+            settings.OnlyTypesToInclude = this.ReadStringArrayFromConfiguration(configuration, Settings.OnlyTypesToIncludeKey);
+            settings.TypesToExclude = this.ReadStringArrayFromConfiguration(configuration, Settings.TypesToExcludeKey);
 
             return new Plugin()
             {
@@ -29,6 +32,19 @@ namespace PrintNicePlugin
             {
                 target(configuration[key].Value<string>());
             }
+        }
+
+        private string[] ReadStringArrayFromConfiguration(JObject configuration, string key)
+        {
+            if (configuration != null && configuration.ContainsKey(key))
+            {
+                return configuration[key]
+                    .AsJEnumerable()
+                    .Where(t => t.Type == JTokenType.String)
+                    .Select(t => t.Value<string>()).ToArray();
+            }
+
+            return null;
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Source.Inputs
 
         public System.String Print()
         {
-            return $"IntProperty: '{IntProperty}'; StringProperty: '{StringProperty}'; IntField: '{IntField}'; StringField: '{StringField}';";
+            return $"IntProperty: '{IntProperty}'; IntField: '{IntField}';";
         }
 
         public override System.String ToString()

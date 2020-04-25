@@ -16,7 +16,8 @@
             "pluginFactory": {
               "type": "PrintNicePlugin.PluginFactory, PrintNicePlugin",
               "config": {
-                "overrideToString": true
+                "overrideToString": true,
+                "typesToExclude": [ "System.String" ]
               }
             }
           },
