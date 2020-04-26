@@ -1,0 +1,41 @@
+{
+  "codeFileHandlers": [
+    { "type": "ForgedOnce.CSharp.CSharpCodeFileHandlerFactory, ForgedOnce.CSharp" }
+  ],
+  "inputs": {
+    "InputModels": "CSharp:Project:Subject/Models/*.cs"
+  },
+  "batches": [
+    {
+      "name": "Batch01",
+      "stages": [
+        {
+          "name": "ExtensionMethods",
+          "plugin": {
+            "pluginFactory": {
+              "type": "ForgedOnce.TsLanguageServices.SyntaxTreeExtensionsPlugin.PluginFactory, ForgedOnce.TsLanguageServices.SyntaxTreeExtensionsPlugin",
+              "config": {
+                "outputNamespace": "Subject.Extensions"
+              }
+            }
+          },
+          "input": {
+            "settings": {
+              "InputModels": "*.cs"
+            }
+          },
+          "output": {
+            "settings": {
+              "PassThrough": "*"
+            }
+          },
+          "destinationMapping": {
+            "PassThrough": {
+              "settings": { "path": "Subject/Extensions/Generated" }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
