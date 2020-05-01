@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Source.Inputs
 {
-    public class TestClass
+    public class TestClass : BaseTestClass
     {
         public int IntField;
         public int IntProperty { get; set; }

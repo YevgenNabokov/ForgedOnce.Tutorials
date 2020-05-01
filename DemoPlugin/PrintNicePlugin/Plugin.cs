@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace PrintNicePlugin
 {
-    public class Plugin : CodeGenerationFromCSharpPlugin<Settings, Parameters>
+    public class Plugin : GroupedCodeGenerationFromCSharpPlugin<Settings, Parameters>
     {
         public const string OutStreamName = "PassThrough";
 
@@ -37,19 +37,24 @@ namespace PrintNicePlugin
             return result;
         }
 
-        protected override void Implementation(CodeFileCSharp input, Parameters inputParameters, IMetadataRecorder metadataRecorder, ILogger logger)
+        protected override void Implementation(FileGroup<CodeFileCSharp, GroupItemDetailsParametrized<Parameters>> group, IMetadataRecorder metadataRecorder, ILogger logger)
         {
-            var outFile = this.passThroughStream.CreateCodeFile(input.Name) as CodeFileCSharp;
-            CSharpSyntaxUtils.CloneContent(input, outFile, metadataRecorder);
-
-            var snapshot = outFile.NodePathService.GetSubTreeSnapshot(outFile.SyntaxTree.GetRoot());
-            var editor = new SyntaxEditor(snapshot, input, outFile, inputParameters, this.Settings);
-            var newRoot = editor.Visit(outFile.SyntaxTree.GetRoot());
-            outFile.SyntaxTree = CSharpSyntaxTree.Create(newRoot as CSharpSyntaxNode);
-
-            foreach (var added in outFile.SyntaxTree.GetRoot().DescendantNodes().Where((n) => n.GetAnnotations(editor.AnnotationKey).Any()))
+            foreach (var inputFile in group.Files)
             {
-                metadataRecorder.SymbolGenerated<SyntaxNode>(outFile.NodePathService, added, new Dictionary<string, string>());
+                var input = inputFile.Key;
+                var inputParameters = inputFile.Value.Parameters;
+                var outFile = this.passThroughStream.CreateCodeFile(input.Name) as CodeFileCSharp;
+                CSharpSyntaxUtils.CloneContent(input, outFile, metadataRecorder);
+
+                var snapshot = outFile.NodePathService.GetSubTreeSnapshot(outFile.SyntaxTree.GetRoot());
+                var editor = new SyntaxEditor(snapshot, input, outFile, inputParameters, this.Settings);
+                var newRoot = editor.Visit(outFile.SyntaxTree.GetRoot());
+                outFile.SyntaxTree = CSharpSyntaxTree.Create(newRoot as CSharpSyntaxNode);
+
+                foreach (var added in outFile.SyntaxTree.GetRoot().DescendantNodes().Where((n) => n.GetAnnotations(editor.AnnotationKey).Any()))
+                {
+                    metadataRecorder.SymbolGenerated<SyntaxNode>(outFile.NodePathService, added, new Dictionary<string, string>());
+                }
             }
         }
     }

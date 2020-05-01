@@ -8,6 +8,8 @@ namespace PrintNicePlugin.Models
 
         public List<MemberParameters> Members = new List<MemberParameters>();
 
+        public bool Override;
+
         public ClassParameters(string typeName)
         {
             this.TypeName = typeName;

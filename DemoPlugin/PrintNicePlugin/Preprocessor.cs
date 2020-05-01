@@ -38,6 +38,31 @@ namespace PrintNicePlugin
 
                 ClassParameters classParams = new ClassParameters(typeName);
 
+                Func<INamedTypeSymbol, bool> typeIsDefinedInInputGroup = (baseType) =>
+                    fileGroup
+                            .Files
+                            .Any(inputFile =>
+                                inputFile.Key.SyntaxTree
+                                .GetRoot()
+                                .DescendantNodes()
+                                .OfType<ClassDeclarationSyntax>()
+                                .Any(inputClass => SymbolEqualityComparer.Default.Equals(inputFile.Key.SemanticModel.GetDeclaredSymbol(inputClass), baseType)));
+
+                Func<INamedTypeSymbol, bool> typeContainsOverridableTargetMethod = (type) =>
+                    type != null
+                    && type.GetAllSymbols<IMethodSymbol>(SymbolKind.Method, Accessibility.Public)
+                        .Any(m => m.Name == pluginSettings.PrintMethodName
+                            && m.Parameters.Length == 0
+                            && SymbolEqualityComparer.Default.Equals(m.ReturnType, input.SemanticModel.Compilation.GetTypeByMetadataName(typeof(string).ToString()))
+                            && (m.IsVirtual || m.IsAbstract));
+
+                classParams.Override =
+                    (fileGroup != null
+                    && declaredSymbol
+                    .GetBaseTypes()
+                    .Any(baseType => typeIsDefinedInInputGroup(baseType)))
+                    || typeContainsOverridableTargetMethod(declaredSymbol.BaseType);                    
+
                 foreach (var prop in declaredSymbol.GetAllSymbols<IPropertySymbol>(SymbolKind.Property, Accessibility.Public))
                 {
                     classParams.Members.Add(new MemberParameters(prop.Name, this.Filter(onlyTypesToInclude, typesToExclude, prop.Type)));

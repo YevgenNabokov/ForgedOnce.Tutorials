@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Source.Inputs
 {
-    public class TestClass
+    public class TestClass : BaseTestClass
     {
         public int IntField;
         public int IntProperty
@@ -20,9 +20,9 @@ namespace Source.Inputs
             set;
         }
 
-        public System.String Print()
+        public override System.String Print()
         {
-            return $"IntProperty: '{IntProperty}'; IntField: '{IntField}';";
+            return $"IntProperty: '{IntProperty}'; IntField: '{IntField}'; BaseIntField: '{BaseIntField}';";
         }
 
         public override System.String ToString()

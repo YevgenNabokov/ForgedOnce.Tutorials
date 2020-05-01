@@ -42,7 +42,7 @@ namespace PrintNicePlugin
             {
                 if (declaredSymbol
                     .GetMembers(this.settings.PrintMethodName)
-                    .Any(m => (m.Kind == SymbolKind.Method && ((IMethodSymbol)m).Parameters.Length == 0) ||
+                    .Any(m => (m.Kind == SymbolKind.Method && ((IMethodSymbol)m).Parameters.Length == 0 && !parameters.Override) ||
                          m.Kind == SymbolKind.Property ||
                          m.Kind == SymbolKind.Field))
                 {
@@ -85,8 +85,21 @@ namespace PrintNicePlugin
                                 Token(SyntaxKind.InterpolatedStringStartToken),
                                 List(parts)))
                     })))
-                .WithModifiers(TokenList(new SyntaxToken[] { Token(SyntaxKind.PublicKeyword) }))
+                .WithModifiers(TokenList(new SyntaxToken[] 
+                {
+                    Token(SyntaxKind.PublicKeyword),
+                    Token(SyntaxKind.VirtualKeyword)
+                }))
                 .WithAdditionalAnnotations(new SyntaxAnnotation(this.AnnotationKey));
+
+            if (parameters.Override)
+            {
+                printMethod = printMethod.WithModifiers(TokenList(new SyntaxToken[] 
+                {
+                    Token(SyntaxKind.PublicKeyword),
+                    Token(SyntaxKind.OverrideKeyword) 
+                }));
+            }
 
             return node.AddMembers(printMethod);
         }
