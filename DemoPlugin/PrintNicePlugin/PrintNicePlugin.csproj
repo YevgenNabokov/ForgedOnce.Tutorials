@@ -1,12 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ForgedOnce.CSharp" Version="0.4.9" />
-    <PackageReference Include="ForgedOnce.CSharp.Helpers" Version="0.1.7" />
+    <PackageReference Include="ForgedOnce.CSharp" Version="0.5.2" />
+    <PackageReference Include="ForgedOnce.CSharp.Helpers" Version="0.1.8" />
   </ItemGroup>
 
 </Project>

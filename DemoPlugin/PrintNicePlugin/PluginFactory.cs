@@ -9,9 +9,7 @@ namespace PrintNicePlugin
 {
     public class PluginFactory : ICodeGenerationPluginFactory<Settings, Parameters, CodeFileCSharp>
     {
-        public ICodeGenerationPlugin CreatePlugin(
-            JObject configuration,
-            IPluginPreprocessor<CodeFileCSharp, Parameters, Settings> pluginPreprocessor = null)
+        public ICodeGenerationPlugin CreatePlugin(JObject configuration, IPipelineCreationContext context, IPluginPreprocessor<CodeFileCSharp, Parameters, Settings> pluginPreprocessor = null)
         {
             var settings = new Settings();
             this.SetFromConfiguration((v) => bool.TryParse(v, out settings.OverrideToString), configuration, Settings.OverrideToStringKey);
